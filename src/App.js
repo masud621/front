@@ -1,23 +1,74 @@
 import logo from './logo.svg';
 import './App.css';
-
+import {useEffect, useState, useRef} from 'react'
+import io from 'socket.io-client'
+import Peer from 'peerjs';
+let socket;
 function App() {
+  const myVideo = useRef()
+  const videoContainer = useRef()
+  
+  const [userId, setUserId] = useState('')
+
+
+  useEffect(()=>{
+    socket = io('http://localhost:8000')
+    socket.on('userId', (id)=>{
+      setUserId(id)
+    })
+    
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then((stream) => {
+      const myPeer = new Peer()
+      // Collected id from peer
+      myPeer.on('open', peerId=>{
+        socket.emit('join-room', 'myroom', peerId)
+      })
+
+
+      myVideo.current.srcObject= stream
+      const userVideo = document.createElement('video')
+
+      // Send media stream to Peer
+				myPeer.on('call', (call)=>{
+          call.answer(stream)
+          call.on('stream', (userVideoStream)=>{
+            addVideoStream(userVideo, userVideoStream)
+          })
+        })
+        
+       socket.on('user-connected', (peerId)=>{
+         // Get data by PeerId
+        const call = myPeer.call(peerId, stream)
+        call.on('stream', userVideoStream=>{
+          console.log(userVideoStream, 'uservideostream');
+          addVideoStream(userVideo, userVideoStream)
+        })
+       })
+
+		})
+
+    
+    
+  }, [])
+
+// Add user video stream to <video></video>
+  const addVideoStream = (video, stream)=>{
+    video.srcObject = stream
+      video.addEventListener('loadedmetadata', () => {
+        video.play()
+      })
+      videoContainer.current.appendChild(video)
+
+  }
+
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div >
+      <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />
+      <div ref={videoContainer} >
+        
+      </div>
     </div>
   );
 }
