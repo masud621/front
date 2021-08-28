@@ -12,7 +12,8 @@ function App() {
 
 
   useEffect(()=>{
-    socket = io('https://videoback.herokuapp.com/ ')
+    socket = io('https://videoback.herokuapp.com')
+    // socket = io('http://localhost:8000')
     socket.on('userId', (id)=>{
       setUserId(id)
     })
