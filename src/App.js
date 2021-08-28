@@ -23,7 +23,7 @@ function App() {
       const peer = new Peer({
         key: 'peerjs',
         host: 'https://videoback.herokuapp.com',
-        port: 80,
+        port: 443,
         path: '/',
         secure: true,
     })
