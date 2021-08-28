@@ -20,7 +20,7 @@ function App() {
     
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .then((stream) => {
-      const peer = new Peer({
+      const myPeer = new Peer({
         key: 'peerjs',
         host: 'https://videoback.herokuapp.com',
         port: 443,
