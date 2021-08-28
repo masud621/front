@@ -20,7 +20,14 @@ function App() {
     
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .then((stream) => {
-      const myPeer = new Peer()
+      const peer = new Peer({
+        key: 'peerjs',
+        host: 'https://videoback.herokuapp.com',
+        port: 80,
+        path: '/',
+        secure: true,
+    })
+    
       // Collected id from peer
       myPeer.on('open', peerId=>{
         socket.emit('join-room', 'myroom', peerId)
