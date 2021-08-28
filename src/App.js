@@ -12,7 +12,7 @@ function App() {
 
 
   useEffect(()=>{
-    socket = io('http://localhost:8000')
+    socket = io('https://git.heroku.com/videoback.git')
     socket.on('userId', (id)=>{
       setUserId(id)
     })
