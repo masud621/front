@@ -67,7 +67,7 @@ function App() {
   
   return (
     <div >
-      <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />
+      <video playsInline  ref={myVideo} autoPlay style={{ width: "300px" }} />
       <div ref={videoContainer} >
         
       </div>
