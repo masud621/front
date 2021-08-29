@@ -20,7 +20,7 @@ function App() {
     
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .then((stream) => {
-      const myPeer = new Peer()
+      const myPeer = new  Peer(undefined, { port: 443, host: '/' });
     
       // Collected id from peer
       myPeer.on('open', peerId=>{
